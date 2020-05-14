@@ -1,0 +1,36 @@
+{% extends "admin_base_panel.html" %}
+
+{% block panel_nav %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">
+            <h1>RedBus Admin Panel</h1>
+        </a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" href="">Users <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Buses</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="">Bookings</a>
+            </li>
+        </ul>
+    </nav>
+    <hr>
+{% endblock %}
+
+{% block container %}
+
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Is Staff</th>
+            <th>Password</th>
+            <th>Action</th>
+        </tr>
+    </table>
+
+{% endblock %}
+
