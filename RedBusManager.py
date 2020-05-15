@@ -73,8 +73,23 @@ def admin_users_panel():
 @app.route('/admin_buses')
 def admin_buses_panel():
     if current_user.is_authenticated:
-        users = Users.query.all()
-        return render_template('admin_buses_panel.html', users=users)
+        buses = []
+
+        with open('RedBus/buses.txt', 'rt') as f:
+            for line in f.readlines():
+                bus_data = line.split("|")
+                bus = {
+                    "id": bus_data[0],
+                    "from": bus_data[1],
+                    "to": bus_data[2],
+                    "pickup_location": bus_data[3],
+                    "boarding_time": bus_data[4],
+                    "deboarding_time": bus_data[5]
+                }
+
+                buses.append(bus)
+
+        return render_template('admin_buses_panel.html', buses=buses)
     else:
         return redirect(url_for('admin_login'))
 
