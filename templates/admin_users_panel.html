@@ -26,10 +26,25 @@
         <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Is Staff</th>
             <th>Password</th>
+            <th>Is Staff</th>
             <th>Action</th>
         </tr>
+
+        {% for user in users %}
+
+        <tr>
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.password}}</td>
+            <td>{{user.is_staff}}</td>
+            <td>
+                {% if user.is_staff %}
+                <button type="button" class="btn btn-danger" >Remove</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 
 {% endblock %}

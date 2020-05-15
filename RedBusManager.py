@@ -45,7 +45,8 @@ def about_us():
 @app.route('/admin_users')
 def admin_users_panel():
     if current_user.is_authenticated:
-        return render_template('admin_users_panel.html')
+        users = Users.query.all()
+        return render_template('admin_users_panel.html', users=users)
     else:
         return redirect(url_for('admin_login'))
 
