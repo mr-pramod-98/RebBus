@@ -42,6 +42,25 @@ def about_us():
     return render_template('about.html')
 
 
+@app.route('/delete/<string:email>')
+def delete_user(email):
+    user = Users.query.filter_by(email=email).first()
+    db.session.delete(user)
+    db.session.commit()
+
+    with open("RedBus/users.txt", "r") as f:
+        lines = f.readlines()
+    with open("RedBus/users.txt", "w") as f:
+        for line in lines:
+            if email not in line:
+                f.write(line)
+
+    flash(user.email, "warning")
+    users = Users.query.all()
+    return render_template('admin_users_panel.html', users=users)
+    pass
+
+
 @app.route('/admin_users')
 def admin_users_panel():
     if current_user.is_authenticated:
