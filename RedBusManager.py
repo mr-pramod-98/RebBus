@@ -70,6 +70,15 @@ def admin_users_panel():
         return redirect(url_for('admin_login'))
 
 
+@app.route('/admin_buses')
+def admin_buses_panel():
+    if current_user.is_authenticated:
+        users = Users.query.all()
+        return render_template('admin_buses_panel.html', users=users)
+    else:
+        return redirect(url_for('admin_login'))
+
+
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
