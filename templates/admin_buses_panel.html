@@ -1,64 +1,28 @@
 {% extends "admin_base_panel.html" %}
 
 {% block panel_nav %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-        <a class="navbar-brand">
-            <h1>RedBus Admin Panel</h1>
-        </a>
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('admin_users_panel') }}">Users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Buses <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Bookings</a>
-            </li>
-        </ul>
-    </nav>
-    <hr>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">
+        <h1>RedBus Admin Panel</h1>
+    </a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin_users_panel') }}">Users</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Buses <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">Bookings</a>
+        </li>
+    </ul>
+</nav>
+<hr>
 {% endblock %}
 
 {% block container %}
-    <table>
-        <from>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="From" required id="from_location">
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="To" required id="to_location">
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Pickup location" required id="pickup_location">
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="Enter boarding time" required id="boarding_time">
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="Enter de-boarding time" required id="deboarding_time">
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success">Add</button>
-                     </div>
-                </td>
-            </tr>
-        </from>
-    </table>
 
-    <br/>
+<form action="{{ url_for('admin_add_route') }}" method="post">
 
     <table class="table table-striped">
 
@@ -68,8 +32,46 @@
             <th>To</th>
             <th>Pickup Location</th>
             <th>Boarding Time</th>
-            <th>De-boarding Time</th>
+            <th>Traveling Time</th>
             <th>Action</th>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="ID" readonly>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Ex. Bangalore" required name="from_location">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Ex. Mysuru" required name="to_location">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Ex. KRM" required name="pickup_location">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="time" class="form-control" required name="boarding_time">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="number" min="1" max="24" class="form-control" required name="traveling_time">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-success">Add</button>
+                </div>
+            </td>
         </tr>
 
         {% for bus in buses %}
@@ -79,13 +81,17 @@
             <td>{{bus.to}}</td>
             <td>{{bus.pickup_location}}</td>
             <td>{{bus.boarding_time}}</td>
-            <td>{{bus.deboarding_time}}</td>
+            <td>{{bus.traveling_time}}</td>
             <td>
-                <a href="/delete/{{ bus.id }}" class="btn btn-danger" onclick="return confirm('Are you sure! you want to delete this route')">Remove</a>
+                <a href="/admin_delete_route/{{ bus.id }}" class="btn btn-danger" onclick="return confirm('Are you sure! you want to delete this route')">Remove</a>
             </td>
         </tr>
         {% endfor %}
+
     </table>
+
+</form>
+
 
 {% endblock %}
 

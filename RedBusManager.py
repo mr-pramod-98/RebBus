@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_login import LoginManager, login_user, current_user, UserMixin, logout_user
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'PRAMOD_J'
@@ -42,23 +43,23 @@ def about_us():
     return render_template('about.html')
 
 
-@app.route('/delete/<string:email>')
-def delete_user(email):
-    user = Users.query.filter_by(email=email).first()
-    db.session.delete(user)
-    db.session.commit()
+@app.route('/admin_delete_user/<string:email>')
+def admin_delete_user(email):
+    if current_user.is_authenticated:
+        user = Users.query.filter_by(email=email).first()
+        db.session.delete(user)
+        db.session.commit()
 
-    with open("RedBus/users.txt", "r") as f:
-        lines = f.readlines()
-    with open("RedBus/users.txt", "w") as f:
-        for line in lines:
-            if email not in line:
-                f.write(line)
+        with open("RedBus/users.txt", "r") as f:
+            lines = f.readlines()
+        with open("RedBus/users.txt", "w") as f:
+            for line in lines:
+                if email not in line:
+                    f.write(line)
 
-    flash(user.email, "warning")
-    users = Users.query.all()
-    return render_template('admin_users_panel.html', users=users)
-    pass
+        flash(f'User with mail-id "{email}" deleted successfully', 'success')
+
+        return redirect(url_for('admin_users_panel'))
 
 
 @app.route('/admin_users')
@@ -84,7 +85,7 @@ def admin_buses_panel():
                     "to": bus_data[2],
                     "pickup_location": bus_data[3],
                     "boarding_time": bus_data[4],
-                    "deboarding_time": bus_data[5]
+                    "traveling_time": bus_data[5]
                 }
 
                 buses.append(bus)
@@ -92,6 +93,43 @@ def admin_buses_panel():
         return render_template('admin_buses_panel.html', buses=buses)
     else:
         return redirect(url_for('admin_login'))
+
+
+@app.route('/admin_add_route', methods=['POST'])
+def admin_add_route():
+    if request.method == 'POST':
+        route_id = abs(hash(str(datetime.now())) % (10 ** 8))
+        from_location = request.form['from_location']
+        to_location = request.form['to_location']
+        pickup_location = request.form['pickup_location']
+        boarding_time = request.form['boarding_time']
+        traveling_time = request.form['traveling_time'] + " hour"
+
+        with open('RedBus/buses.txt', 'at') as f:
+            f.write(str(route_id) + "|"
+                    + from_location + "|"
+                    + to_location + "|"
+                    + pickup_location + "|"
+                    + boarding_time + "|"
+                    + traveling_time + "\n")
+
+        flash(f'Route {route_id} add successfully', 'success')
+        return redirect(url_for('admin_buses_panel'))
+
+
+@app.route('/admin_delete_route/<string:route_id>')
+def admin_delete_route(route_id):
+    if current_user.is_authenticated:
+
+        with open("RedBus/buses.txt", "r") as f:
+            lines = f.readlines()
+        with open("RedBus/buses.txt", "w") as f:
+            for line in lines:
+                if route_id not in line:
+                    f.write(line)
+
+        flash(f'Route with id "{route_id}" deleted successfully', 'success')
+        return redirect(url_for('admin_buses_panel'))
 
 
 @app.route('/admin_login', methods=['GET', 'POST'])
