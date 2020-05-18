@@ -41,7 +41,38 @@ def home():
 
 @app.route('/about-us')
 def about_us():
-    return render_template('about.html')
+    return render_template('about.html', is_search=False)
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    buses = []
+    from_location = request.form['from']
+
+    # from
+    with open('RedBus/Index/from_location.txt', 'r') as f:
+        from_location_data = json.load(f)
+        try:
+            route_ids = from_location_data['from_location'][from_location]
+        except KeyError:
+            return render_template('home.html', buses=buses, is_search_success=False, is_search=True)
+
+    with open('RedBus/buses.txt', 'r') as f:
+        for route_id in route_ids:
+            for line in f.readlines():
+                if str(route_id) in line:
+                    bus_data = line.split("|")
+                    bus = {
+                        "id": bus_data[0],
+                        "from": bus_data[1],
+                        "to": bus_data[2],
+                        "pickup_location": bus_data[3],
+                        "boarding_time": bus_data[4],
+                        "traveling_time": bus_data[5]
+                    }
+                    buses.append(bus)
+
+    return render_template('home.html', buses=buses, is_search_success=True, is_search=True)
 
 
 @app.route('/admin_delete_user/<string:email>')
