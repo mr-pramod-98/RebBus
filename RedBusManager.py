@@ -147,6 +147,8 @@ def admin_add_route():
 @app.route('/admin_delete_route/<string:route_id>')
 def admin_delete_route(route_id):
     if current_user.is_authenticated:
+        from_location = None
+        to_location = None
 
         with open("RedBus/buses.txt", "r") as f:
             lines = f.readlines()
@@ -154,6 +156,36 @@ def admin_delete_route(route_id):
             for line in lines:
                 if route_id not in line:
                     f.write(line)
+                else:
+                    from_location = line.split("|")[1]
+                    to_location = line.split("|")[2]
+
+        # from
+        with open('RedBus/Index/from_location.txt', 'r') as f:
+            from_location_data = json.load(f)
+            route_ids = from_location_data['from_location'][from_location]
+            route_ids.remove(int(route_id))
+
+            if len(route_ids) == 0:
+                del from_location_data['from_location'][from_location]
+
+        with open('RedBus/Index/from_location.txt', 'w') as f:
+            locations = json.dumps(from_location_data)
+            f.write(locations)
+
+
+        # to
+        with open('RedBus/Index/to_location.txt', 'r') as f:
+            to_location_data = json.load(f)
+            route_ids = to_location_data['to_location'][to_location]
+            route_ids.remove(int(route_id))
+
+            if len(route_ids) == 0:
+                del to_location_data['to_location'][to_location]
+
+        with open('RedBus/Index/to_location.txt', 'w') as f:
+            locations = json.dumps(to_location_data)
+            f.write(locations)
 
         flash(f'Route with id "{route_id}" deleted successfully', 'success')
         return redirect(url_for('admin_buses_panel'))

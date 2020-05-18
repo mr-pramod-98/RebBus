@@ -1,3 +1,3 @@
-1437789|Bangalore|Manglore|KRM|13:30|6 hour
 44264454|Mysuru|Bangalore|Palace|06:00|3 hour
 42895121|Udpi|Bangalore|JP Nagar|07:30|4 hour
+53220358|Bangalore|Manglore|KRM|13:03|6 hour

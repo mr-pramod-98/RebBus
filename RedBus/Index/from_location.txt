@@ -1,1 +1,1 @@
-{"from_location": {"Bangalore": [1437789], "Mysuru": [44264454], "Udpi": [42895121]}}
+{"from_location": {"Mysuru": [44264454], "Udpi": [42895121], "Bangalore": [53220358]}}
