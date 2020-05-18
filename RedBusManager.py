@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_login import LoginManager, login_user, current_user, UserMixin, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'PRAMOD_J'
@@ -112,6 +113,32 @@ def admin_add_route():
                     + pickup_location + "|"
                     + boarding_time + "|"
                     + traveling_time + "\n")
+
+        # from
+        with open('RedBus/Index/from_location.txt', 'r') as f:
+            from_location_data = json.load(f)
+            try:
+                route_ids = from_location_data['from_location'][from_location]
+                route_ids.append(route_id)
+            except KeyError:
+                from_location_data['from_location'][from_location] = [route_id]
+
+        with open('RedBus/Index/from_location.txt', 'w') as f:
+            locations = json.dumps(from_location_data)
+            f.write(locations)
+
+        # to
+        with open('RedBus/Index/to_location.txt', 'r') as f:
+            to_location_data = json.load(f)
+            try:
+                route_ids = to_location_data['to_location'][to_location]
+                route_ids.append(route_id)
+            except KeyError:
+                to_location_data['to_location'][to_location] = [route_id]
+
+        with open('RedBus/Index/to_location.txt', 'w') as f:
+            locations = json.dumps(to_location_data)
+            f.write(locations)
 
         flash(f'Route {route_id} add successfully', 'success')
         return redirect(url_for('admin_buses_panel'))
