@@ -68,7 +68,9 @@ def search():
                         "to": bus_data[2],
                         "pickup_location": bus_data[3],
                         "boarding_time": bus_data[4],
-                        "traveling_time": bus_data[5]
+                        "traveling_time": bus_data[5],
+                        "no_of_seats": bus_data[6],
+                        "price": bus_data[7]
                     }
                     buses.append(bus)
 
@@ -117,7 +119,9 @@ def admin_buses_panel():
                     "to": bus_data[2],
                     "pickup_location": bus_data[3],
                     "boarding_time": bus_data[4],
-                    "traveling_time": bus_data[5]
+                    "traveling_time": bus_data[5],
+                    "no_of_seats": bus_data[6],
+                    "price": bus_data[7]
                 }
 
                 buses.append(bus)
@@ -136,6 +140,8 @@ def admin_add_route():
         pickup_location = request.form['pickup_location']
         boarding_time = request.form['boarding_time']
         traveling_time = request.form['traveling_time'] + " hour"
+        no_of_seats = request.form['no_of_seats']
+        price = request.form['price']
 
         with open('RedBus/buses.txt', 'at') as f:
             f.write(str(route_id) + "|"
@@ -143,7 +149,9 @@ def admin_add_route():
                     + to_location + "|"
                     + pickup_location + "|"
                     + boarding_time + "|"
-                    + traveling_time + "\n")
+                    + traveling_time + "|"
+                    + no_of_seats + "|"
+                    + price + "\n")
 
         # from
         with open('RedBus/Index/from_location.txt', 'r') as f:
