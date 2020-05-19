@@ -34,17 +34,23 @@ class Users(db.Model, UserMixin):
 
 
 @app.route('/')
-@app.route('/home')
+@app.route('/RedBus/home')
 def home():
     return render_template('home.html')
 
 
-@app.route('/about-us')
+@app.route('/RedBus/about-us')
 def about_us():
     return render_template('about.html', is_search=False)
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
+def ticket_booking(route_id):
+
+    return render_template('booking.html')
+
+
+@app.route('/RedBus/search', methods=['POST'])
 def search():
     buses = []
     from_location = request.form['from']

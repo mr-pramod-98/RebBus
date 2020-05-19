@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RedBus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <h4 class="navbar-brand ">RedBus</h4>
+    </nav>
+
+    <div class="container center" style="width:60%; margin-top:20px;">
+
+        <h3 class="text-center">Start Your Travel By A Click</h3>
+
+        <form action="" method="post" style="margin-top:60px;">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" class="form-control" placeholder="username" readonly>
+            </div>
+            <div class="form-group">
+                <label>Email address:</label>
+                <input type="text" class="form-control" placeholder="email" readonly>
+            </div>
+            <div class="form-group">
+                <label>Number of seats:</label>
+                <input type="number" min="1" max="30" class="form-control" placeholder="no_of_seats" required>
+            </div>
+            <div class="form-group">
+                <label>Total cost:</label>
+                <input type="text" class="form-control" placeholder="total_cost" readonly>
+            </div>
+            <br/>
+            <div class="form-group">
+                <input type="submit" class="form-control" value="Submit">
+            </div>
+        </form>
+
+    </div>
+
+</body>
+
+<footer>
+	<script type="text/javascript" src="{{ url_for('static', filename='javascript/bootstrap.js') }}"></script>
+</footer>
+
+</html>
