@@ -137,6 +137,14 @@ def admin_buses_panel():
         return redirect(url_for('admin_login'))
 
 
+@app.route('/admin_booking')
+def admin_booking_panel():
+    if current_user.is_authenticated:
+        return render_template('admin_booking_panel.html')
+    else:
+        return redirect(url_for('admin_login'))
+
+
 @app.route('/admin_add_route', methods=['POST'])
 def admin_add_route():
     if request.method == 'POST':

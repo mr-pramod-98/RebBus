@@ -1,0 +1,82 @@
+{% extends 'admin_base_panel.html' %}
+
+{% block panel_nav %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <a class="navbar-brand">
+        <h1>RedBus Admin Panel</h1>
+    </a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin_users_panel') }}">Users</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin_buses_panel') }}">Buses</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Bookings <span class="sr-only">(current)</span></a>
+        </li>
+    </ul>
+</nav>
+<hr>
+{% endblock %}
+
+{% block container %}
+
+<div class="destinations" id="destinations">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<h2> Bookings </h2>
+				</div>
+			</div>
+
+			<div class="row ">
+				<div class="col">
+					<div class="item_grid">
+
+						<!-- Route -->
+						<div class="item col-sm-4">
+							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; margin-top:30px; padding:15px; border-radius: 8px;">
+								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
+								<div class="destination_route"><p>44264454</p></div>
+							</div>
+						</div>
+
+						<!-- Route -->
+						<div class="item col-sm-4">
+							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; margin-top:30px; padding:15px; border-radius: 8px;">
+								<div class="destination_title"><h2 style="color: #FFF;">Udpi to Bangalore</h2></div>
+								<div class="destination_route"><p>42895121</p></div>
+							</div>
+						</div>
+
+						<!-- Route -->
+						<div class="item col-sm-4">
+							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
+								<div class="destination_title"><h2 style="color: #FFF;">Bangalore to Mangalore</h2></div>
+								<div class="destination_route"><p>53220358</p></div>
+							</div>
+						</div>
+
+						<!-- Route -->
+						<div class="item col-sm-4">
+							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
+								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
+								<div class="destination_route"><p>44264454</p></div>
+							</div>
+						</div>
+
+						<div class="item col-sm-4">
+							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
+								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
+								<div class="destination_route"><p>44264454</p></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
