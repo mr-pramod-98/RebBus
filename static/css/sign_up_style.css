@@ -1,0 +1,138 @@
+html { 
+    background: url(../images/background.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.sign-in-card {
+    background-color: white;
+    width: 38vw;
+    border-radius: 5% 0 0 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.hero-card {
+    font-family: 'Pacifico', cursive;
+    width: 62vw;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    font-weight: 100;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    font-weight: 100;
+}
+
+.sign-in-up {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    
+    margin-top: 15%;
+}
+
+a {
+    text-decoration: none;
+    font-size: 2rem;
+    color: #345D7B;
+}
+
+.sign-up-text {
+    color: #345D7B;
+}
+
+.sign-in-text {
+    color: rgb(52, 93, 123,0.3);
+}
+
+input {
+    display: block;
+    font-size: 1.2rem;
+    padding: 1em;
+    border-radius: 0 15px 15px 0;
+    border-style: none;
+    font-family: inherit;
+}
+
+#button {
+    background-color: #345D7B;
+    color: white;
+    border: 0;
+    font-size: 1.5rem;
+    padding: .6em 2em;
+    border-radius: 20px;
+    margin-top: 1.6em;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:hover {
+    background-color: rgb(26, 66, 95);
+}
+
+.name-input {
+    margin-top: 2.6em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+}
+
+.email-input {
+    margin-top: 2.6em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+}
+
+i {
+    font-size: 2rem;
+    padding: .5em;
+    background-color: #CDDEEE;
+    color: #345D7B;
+    border-radius: 15px 15px 15px 15px;
+    border-right: 2px solid #345D7B;
+}
+
+.password-input {
+    margin-top: 2.6em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+}
+
+hr {
+    background-color: #345D7B;
+    width: 32%;
+    height: 1%;
+    margin: 0;
+    align-self: flex-end;
+    margin-right: 4em;
+    margin-top: 1em;
+}

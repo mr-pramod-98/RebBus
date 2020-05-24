@@ -1,60 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>RedBus</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedBus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Pacifico&display=swap" rel="stylesheet">
 </head>
-
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><h1>RedBus</h1></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="nav-links">
+            <li><a class="active" href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="{{ url_for('user_logout') }}">Sign out</a></li>
+        </ul>
+    </nav>
 
-	<h1>HOME PAGE</h1>
+    <div class="main-background">
+        <div class="from-to-input">
+            <div class="from-input">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" placeholder="From">
+            </div>
+            <div class="reverse-button">
+                <i class="fas fa-retweet"></i>
+            </div>
+            <div class="to-input">
+                <input type="text" placeholder="To">
+                <i class="fab fa-font-awesome-flag"></i>
+            </div>
+        </div>
+    </div>
 
-	<form action="{{ url_for('search') }}" method="post">
-		<input type="text" placeholder="from" name="from">
-		<input type="submit" value="search">
-	</form>
+    <div class="bus-list">
+        <h2>Available buses</h2>
 
-    {% if is_search_success %}
-	    <table class="table table-striped">
+        {% if is_search_success %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Pickup</th>
+                        <th>Boarding</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Seats left</th>
+                        <th style="color: #345D7B;">Book</th>
+                    </tr>
+                </thead>
 
-            <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Pickup Location</th>
-                <th>Boarding Time</th>
-                <th>Duration</th>
-                <th>Price</th>
-                <th>Seats left</th>
-                <th>Action</th>
-            </tr>
+                <tbody>
+                    {% for bus in buses %}
+                    <tr>
+                        <td>{{bus.from}}</td>
+                        <td>{{bus.to}}</td>
+                        <td>{{bus.pickup_location}}</td>
+                        <td>{{bus.boarding_time}}</td>
+                        <td>{{bus.traveling_time}}</td>
+                        <td>{{bus.no_of_seats}}</td>
+                        <td>{{bus.price}}</td>
+                        <td>
+                            <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
+                                <input type="submit" class="btn btn-danger" value="Book">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% elif is_search %}
+            <h3> No Buses found for your search </h3>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Pickup</th>
+                        <th>Boarding</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Seats left</th>
+                        <th style="color: #345D7B;">Book</th>
+                    </tr>
+                </thead>
 
-            {% for bus in buses %}
-            <tr>
-                <td>{{bus.from}}</td>
-                <td>{{bus.to}}</td>
-                <td>{{bus.pickup_location}}</td>
-                <td>{{bus.boarding_time}}</td>
-                <td>{{bus.traveling_time}}</td>
-                <td>{{bus.no_of_seats}}</td>
-                <td>{{bus.price}}</td>
-                <td>
-                    <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
-                        <input type="submit" class="btn btn-danger" value="Book">
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-
-	    </table>
-    {% elif is_search %}
-        <h3> No Buses found for your search </h3>
-    {% endif %}
-
+                <tbody>
+                    {% for bus in buses %}
+                    <tr>
+                        <td>{{bus.from}}</td>
+                        <td>{{bus.to}}</td>
+                        <td>{{bus.pickup_location}}</td>
+                        <td>{{bus.boarding_time}}</td>
+                        <td>{{bus.traveling_time}}</td>
+                        <td>{{bus.no_of_seats}}</td>
+                        <td>{{bus.price}}</td>
+                        <td>
+                            <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
+                                <input type="submit" class="btn btn-danger" value="Book">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
 </body>
 
 <footer>
-	<script type="text/javascript" src="{{ url_for('static', filename='javascript/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='javascript/bootstrap.js') }}"></script>
+    <script src="https://kit.fontawesome.com/f73f05b1a6.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

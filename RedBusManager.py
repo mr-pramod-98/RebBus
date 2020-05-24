@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_login import LoginManager, login_user, current_user, UserMixin, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from hashlib import md5
 import json
 
 app = Flask(__name__)
@@ -33,10 +34,87 @@ class Users(db.Model, UserMixin):
         return f'email: {self.email}, password: {self.password}'
 
 
+def user_exist(email):
+    user = Users.query.filter_by(email=email).first()
+    if user:
+        return True
+    else:
+        return False
+
+
+@app.route('/RedBus/sign-in', methods=['POST', 'GET'])
+def user_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        user = Users.query.filter_by(email=email).first()
+
+        if user:
+            if user.password == password:
+                login_user(user, True)
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid admin credentials', 'warning')
+                return render_template('home.html')
+        else:
+            flash('No record found, check your credentials', 'warning')
+            return render_template('user_login.html')
+
+    else:
+        return render_template('user_login.html')
+
+
+@app.route('/RedBus/sign-up', methods=['POST', 'GET'])
+def user_sign_up():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+
+        if not user_exist(email):
+            user = Users(name, email, password, False)
+            db.session.add(user)
+            db.session.commit()
+
+            with open("RedBus/users.txt", "at") as file:
+                file.write(name + "|" + email + "|" + md5(password.encode()).hexdigest() + "|" + str(False) + "\n")
+
+            return redirect(url_for('user_login'))
+
+        else:
+            print("User already exist")
+            return render_template('user_sign_up.html')
+    else:
+        return render_template('user_sign_up.html')
+
+
 @app.route('/')
 @app.route('/RedBus/home')
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        buses = []
+
+        with open('RedBus/buses.txt', 'rt') as f:
+            for line in f.readlines():
+                bus_data = line.split("|")
+                bus = {
+                    "id": bus_data[0],
+                    "from": bus_data[1],
+                    "to": bus_data[2],
+                    "pickup_location": bus_data[3],
+                    "boarding_time": bus_data[4],
+                    "traveling_time": bus_data[5],
+                    "no_of_seats": bus_data[6],
+                    "price": bus_data[7]
+                }
+
+                buses.append(bus)
+
+        return render_template('home.html', buses=buses, is_search=False)
+
+    else:
+        return redirect(url_for('user_login'))
 
 
 @app.route('/RedBus/about-us')
@@ -46,41 +124,49 @@ def about_us():
 
 @app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
 def ticket_booking(route_id):
-
     return render_template('booking.html')
 
 
-@app.route('/RedBus/search', methods=['POST'])
+@app.route('/RedBus/home/search', methods=['POST'])
 def search():
-    buses = []
-    from_location = request.form['from']
+    if current_user.is_authenticated:
+        buses = []
+        from_location = request.form['from']
 
-    # from
-    with open('RedBus/Index/from_location.txt', 'r') as f:
-        from_location_data = json.load(f)
-        try:
-            route_ids = from_location_data['from_location'][from_location]
-        except KeyError:
-            return render_template('home.html', buses=buses, is_search_success=False, is_search=True)
+        # from
+        with open('RedBus/Index/from_location.txt', 'r') as f:
+            from_location_data = json.load(f)
+            try:
+                route_ids = from_location_data['from_location'][from_location]
+            except KeyError:
+                return render_template('home.html', buses=buses, is_search_success=False, is_search=True)
 
-    with open('RedBus/buses.txt', 'r') as f:
-        for route_id in route_ids:
-            for line in f.readlines():
-                if str(route_id) in line:
-                    bus_data = line.split("|")
-                    bus = {
-                        "id": bus_data[0],
-                        "from": bus_data[1],
-                        "to": bus_data[2],
-                        "pickup_location": bus_data[3],
-                        "boarding_time": bus_data[4],
-                        "traveling_time": bus_data[5],
-                        "no_of_seats": bus_data[6],
-                        "price": bus_data[7]
-                    }
-                    buses.append(bus)
+        with open('RedBus/buses.txt', 'r') as f:
+            for route_id in route_ids:
+                for line in f.readlines():
+                    if str(route_id) in line:
+                        bus_data = line.split("|")
+                        bus = {
+                            "id": bus_data[0],
+                            "from": bus_data[1],
+                            "to": bus_data[2],
+                            "pickup_location": bus_data[3],
+                            "boarding_time": bus_data[4],
+                            "traveling_time": bus_data[5],
+                            "no_of_seats": bus_data[6],
+                            "price": bus_data[7]
+                        }
+                        buses.append(bus)
 
-    return render_template('home.html', buses=buses, is_search_success=True, is_search=True)
+        return render_template('home.html', buses=buses, is_search_success=True, is_search=True)
+    else:
+        return redirect(url_for('user_login'))
+
+
+@app.route('/logout')
+def user_logout():
+    logout_user()
+    return redirect(url_for('user_login'))
 
 
 @app.route('/admin_delete_user/<string:email>')
@@ -113,7 +199,7 @@ def admin_users_panel():
 
 @app.route('/admin_buses')
 def admin_buses_panel():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.is_staff:
         buses = []
 
         with open('RedBus/buses.txt', 'rt') as f:
@@ -139,7 +225,7 @@ def admin_buses_panel():
 
 @app.route('/admin_booking')
 def admin_booking_panel():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.is_staff:
         return render_template('admin_booking_panel.html')
     else:
         return redirect(url_for('admin_login'))
@@ -199,7 +285,7 @@ def admin_add_route():
 
 @app.route('/admin_delete_route/<string:route_id>')
 def admin_delete_route(route_id):
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.is_staff:
         from_location = None
         to_location = None
 
@@ -247,13 +333,14 @@ def admin_delete_route(route_id):
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
+        logout_user()
         email = request.form['email']
         password = request.form['password']
 
         user = Users.query.filter_by(email=email).first()
 
         if user:
-            if user.password == password:
+            if user.password == password and user.is_staff:
                 login_user(user, True)
                 return redirect(url_for('admin_users_panel'))
             else:

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedBus</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sign_up_style.css') }}">
+</head>
+<body>
+    <div class="hero-card">
+        <h1>Redbus</h1>
+        <h2>Best buses at the cheapest prices</h2>
+    </div>
+    <div class="sign-in-card">
+        <form action="{{ url_for('user_sign_up') }}" method="post">
+            <div class="sign-in-up">
+                <a href="{{ url_for('user_login') }}" class="sign-in-text">Sign in</a>
+                <a href="#" class="sign-up-text">Sign up</a>
+            </div>
+            <hr>
+
+            <div class="name-input">
+                <i class="fas fa-user"></i>
+                <input type="text" placeholder="Name" name="name">
+            </div>
+
+            <div class="email-input">
+                <i class="fas fa-at"></i>
+                <input type="email" placeholder="Email" name="email">
+            </div>
+
+            <div class="password-input">
+                <i class="fas fa-lock"></i>
+                <input type="password" placeholder="Password" name="password">
+            </div>
+
+            <input type="submit" id="button" value="Sign up">
+        </form>
+    </div>
+</body>
+
+<footer>
+    <script src="https://kit.fontawesome.com/f73f05b1a6.js" crossorigin="anonymous"></script>
+</footer>
+
+</html>

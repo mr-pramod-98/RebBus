@@ -1,0 +1,176 @@
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+}
+
+nav h1 {
+    font-family: 'Pacifico', cursive;
+    color: #345D7B;
+    margin: 0;
+    font-weight: 100;
+    margin: .2em;
+    display: inline;
+}
+
+a {
+    text-decoration: none;
+    color: #345D7B;
+    font-weight: bold;
+    margin: 0 1em;
+    font-size: 1.2rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.active {
+    color: #000;
+}
+
+nav {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.input-background {
+    height: 45vh;
+    width: 100vw;
+    object-fit: cover;
+}
+
+input {
+    display: block;
+    font-size: 1.2rem;
+    padding: 1em;
+    border-radius: 0 15px 15px 0;
+    border-style: none;
+    font-family: inherit;
+}
+
+.from-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+}
+
+.to-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+}
+
+.from-to-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.to-input input {
+    display: block;
+    font-size: 1.2rem;
+    padding: 1em;
+    border-radius: 15px 0 0 15px;
+    border-style: none;
+    font-family: inherit;
+}
+
+.to-input i {
+    font-size: 2rem;
+    padding: .5em;
+    background-color: #CDDEEE;
+    color: #345D7B;
+    border-radius: 15px 15px 15px 15px;
+    border-left: 2px solid #345D7B;
+}
+
+.from-input i {
+    font-size: 2rem;
+    padding: .5em;
+    background-color: #CDDEEE;
+    color: #345D7B;
+    border-radius: 15px 15px 15px 15px;
+    border-right: 2px solid #345D7B;
+}
+
+.reverse-button {
+    background-color: #345D7B;
+    border-radius: 60%;
+    padding: 1em;
+}
+
+.reverse-button i {
+    color: white;
+    font-size: 2rem;
+}
+
+.main-background {
+    background-image:linear-gradient(
+      115deg,
+      rgba(26, 66, 95,0.6),
+      rgba(26, 66, 95,0.6)
+    ),
+    url(main_background.jpg);
+    object-fit: cover;
+    height: 45vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bus-list h2 {
+    font-weight: lighter;
+    color: #345D7B;
+    margin: .6em .5em;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+thead tr {
+    color: white;
+    margin-top: 1em;
+}
+
+th {
+    background-color: #345D7B;
+    height: 2.5em;
+}
+
+td {
+    height: 3.5em;
+    border: none;
+}
+
+tbody tr {
+    color: #345D7B;
+    margin-top: 1em;
+
+}
+
+.book-button {
+    background-color: #3C9DE4;
+    color: white;
+    cursor: pointer;
+}
+
+.book-button:hover {
+    background-color: rgb(21, 141, 226);
+}
+
