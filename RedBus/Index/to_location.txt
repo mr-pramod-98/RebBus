@@ -1,1 +1,1 @@
-{"to_location": {"Bangalore": [44264454, 42895121], "Manglore": [53220358]}}
+{"to_location": {"Bangalore": [44264454, 42895121], "Manglore": [53220358], "Kolar": [98497940]}}

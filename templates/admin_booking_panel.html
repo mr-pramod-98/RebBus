@@ -34,44 +34,15 @@
 				<div class="col">
 					<div class="item_grid">
 
+						{% for booking in bookings %}
 						<!-- Route -->
 						<div class="item col-sm-4">
 							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; margin-top:30px; padding:15px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
-								<div class="destination_route"><p>44264454</p></div>
+								<div class="destination_title"><h2 style="color: #FFF;">{{ booking.from}} to {{ booking.to }}</h2></div>
+								<div class="destination_route"><p>{{ booking.route_id }}</p></div>
 							</div>
 						</div>
-
-						<!-- Route -->
-						<div class="item col-sm-4">
-							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; margin-top:30px; padding:15px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">Udpi to Bangalore</h2></div>
-								<div class="destination_route"><p>42895121</p></div>
-							</div>
-						</div>
-
-						<!-- Route -->
-						<div class="item col-sm-4">
-							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">Bangalore to Mangalore</h2></div>
-								<div class="destination_route"><p>53220358</p></div>
-							</div>
-						</div>
-
-						<!-- Route -->
-						<div class="item col-sm-4">
-							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
-								<div class="destination_route"><p>44264454</p></div>
-							</div>
-						</div>
-
-						<div class="item col-sm-4">
-							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; padding:15px; margin-top:30px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">Mysuru to Bangalore</h2></div>
-								<div class="destination_route"><p>44264454</p></div>
-							</div>
-						</div>
+						{% endfor %}
 
 					</div>
 				</div>

@@ -15,22 +15,22 @@
 
         <h3 class="text-center">Start Your Travel By A Click</h3>
 
-        <form action="" name="form_booking" method="post" style="margin-top:60px;">
+        <form action="/RedBus/current_user/{{ form_data.route_id }}/confirm_booking" name="form_booking" method="post" style="margin-top:60px;">
             <div class="form-group">
                 <label>Username:</label>
-                <input type="text" class="form-control" placeholder="{{ form_data.name }}" readonly>
+                <input type="text" class="form-control" value="{{ form_data.name }}" name="name" readonly>
             </div>
             <div class="form-group">
                 <label>Email address:</label>
-                <input type="text" class="form-control" placeholder="{{ form_data.email }}" readonly>
+                <input type="text" class="form-control" value="{{ form_data.email }}" name="email" readonly>
             </div>
             <div class="form-group">
                 <label>Number of seats:</label>
-                <input type="number" min="1" max="{{ form_data.max_seats }}" class="form-control" name="total_seats" value="1" required>
+                <input type="number" min="1" max="{{ form_data.max_seats }}" class="form-control" name="number_of_seats" value="1" required>
             </div>
             <div class="form-group">
                 <label>Total cost:</label>
-                <input type="text" id="total-cost" class="form-control" name="total_cost" value="{{ form_data.cost }}" readonly>
+                <input type="text" class="form-control" name="cost" value="{{ form_data.cost }}" readonly>
             </div>
             <br/>
             <div class="form-group">
@@ -45,16 +45,16 @@
 <footer>
     <script>
         document
-            .forms["form_booking"]["total_seats"]
+            .forms["form_booking"]["number_of_seats"]
             .addEventListener(
                 "change",
                 function(){
-                    let seats = document.forms["form_booking"]["total_seats"].value;
+                    let seats = document.forms["form_booking"]["number_of_seats"].value;
                     if( seats <= 0){
-                        document.forms["form_booking"]["total_cost"].value = "Number of seats cannot be less than 1";
+                        document.forms["form_booking"]["cost"].value = "Number of seats cannot be less than 1";
                     }else{
                         let total_cost = seats * {{ form_data.cost }};
-                        document.forms["form_booking"]["total_cost"].value = total_cost;
+                        document.forms["form_booking"]["cost"].value = total_cost;
                     }
                 }
             );

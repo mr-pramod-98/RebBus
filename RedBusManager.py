@@ -125,18 +125,81 @@ def about_us():
 @app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
 def ticket_booking(route_id):
     form_data = {}
-    with open('RedBus/buses.txt', 'r') as f:
+    with open('RedBus/buses.txt', 'rt') as f:
         for line in f.readlines():
             if route_id in line:
                 data = line.split("|")
                 form_data = {
+                    "route_id": route_id,
                     "name": current_user.name,
                     "email": current_user.email,
-                    "cost": data[-2],
-                    "max_seat": data[-1]
+                    "max_seat": data[-2],
+                    "cost": data[-1]
                 }
                 break
     return render_template('booking.html', form_data=form_data)
+
+
+@app.route('/RedBus/current_user/<string:route_id>/confirm_booking', methods=['POST'])
+def confirm_booking(route_id):
+    name = request.form['name']
+    email = request.form['email']
+    number_of_seats = request.form['number_of_seats']
+    cost = request.form['cost']
+
+    seats = None
+    global lines
+
+    with open('RedBus/buses.txt', 'rt') as f:
+        lines = f.readlines()
+        for line in lines:
+            if route_id in line:
+                data = line.split("|")
+                seats = str(int(data[-2]) - int(number_of_seats))
+                break
+
+    with open('RedBus/buses.txt', 'wt') as f:
+        for line in lines:
+            if route_id in line:
+
+                data = line.split("|")
+                data[6] = seats
+                f.write(route_id + "|"
+                        + data[1] + "|"
+                        + data[2] + "|"
+                        + data[3] + "|"
+                        + data[4] + "|"
+                        + data[5] + "|"
+                        + data[6] + "|"
+                        + data[7])
+            else:
+                f.write(line)
+
+    with open('RedBus/bookings.txt', 'rt') as f:
+        bookings = json.load(f)
+        try:
+            bookings_list = bookings["bookings"][route_id]
+            bookings_list.append({
+                "booking_id": ("RedBus:" + ".".join(str(datetime.now().date()).replace("-", ""))),
+                "name": name,
+                "email": email,
+                "number_of_seats": number_of_seats,
+                "cost": cost
+            })
+        except KeyError:
+            bookings["bookings"][route_id] = [{
+                "booking_id": ("RedBus:" + ".".join(str(datetime.now().date()).replace("-", ""))),
+                "name": name,
+                "email": email,
+                "number_of_seats": number_of_seats,
+                "cost": cost
+            }]
+
+    with open('RedBus/bookings.txt', 'wt') as f:
+        new_bookings = json.dumps(bookings)
+        f.write(new_bookings)
+
+    return redirect(url_for('home'))
 
 
 @app.route('/RedBus/home/search', methods=['POST'])
@@ -238,7 +301,29 @@ def admin_buses_panel():
 @app.route('/admin_booking')
 def admin_booking_panel():
     if current_user.is_authenticated and current_user.is_staff:
-        return render_template('admin_booking_panel.html')
+        bookings = []
+        route_ids = []
+
+        with open('RedBus/bookings.txt', 'rt') as f:
+            items = json.load(f)
+            for item in items['bookings']:
+                route_ids.append(item)
+
+        with open('RedBus/buses.txt', 'rt') as f:
+            for line in f.readlines():
+                data = line.split("|")
+                route_id = data[0]
+
+                if route_id in route_ids:
+                    booking = {
+                        "route_id": route_id,
+                        "from": data[1],
+                        "to": data[2]
+                    }
+
+                    bookings.append(booking)
+
+        return render_template('admin_booking_panel.html', bookings=bookings)
     else:
         return redirect(url_for('admin_login'))
 
