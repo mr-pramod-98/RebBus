@@ -119,7 +119,10 @@ def home():
 
 @app.route('/RedBus/about-us')
 def contact():
-    return render_template('contact.html', is_search=False)
+    if current_user.is_authenticated:
+        return render_template('contact.html')
+    else:
+        return redirect(url_for('user_login'))
 
 
 @app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
