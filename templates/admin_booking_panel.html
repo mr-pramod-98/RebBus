@@ -22,31 +22,61 @@
 
 {% block container %}
 
-<div class="destinations" id="destinations">
+	<div class="destinations" id="destinations">
 		<div class="container">
+
 			<div class="row">
 				<div class="col text-center">
 					<h2> Bookings </h2>
 				</div>
 			</div>
 
-			<div class="row ">
-				<div class="col">
-					<div class="item_grid">
+			{% if show_specific_item_details %}
 
-						{% for booking in bookings %}
-						<!-- Route -->
-						<div class="item col-sm-4">
-							<div class="destination_content" style="background: #808080; height:140px; margin-left: 6px; margin-right: 6px; margin-top:30px; padding:15px; border-radius: 8px;">
-								<div class="destination_title"><h2 style="color: #FFF;">{{ booking.from}} to {{ booking.to }}</h2></div>
-								<div class="destination_route"><p>{{ booking.route_id }}</p></div>
-							</div>
+				<table class="table table-striped">
+					<tr>
+						<th>Booking ID</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Number Of Seats</th>
+						<th>Cost</th>
+					</tr>
+
+					{% for booking in bookings %}
+
+					<tr>
+						<td>{{booking.booking_id}}</td>
+						<td>{{booking.name}}</td>
+						<td>{{booking.email}}</td>
+						<td>{{booking.number_of_seats}}</td>
+						<td>{{booking.cost}}</td>
+					</tr>
+					{% endfor %}
+				</table>
+
+			{% else %}
+
+				<div class="row ">
+					<div class="col">
+						<div class="item_grid">
+
+							{% for booking in bookings %}
+							<!-- Route -->
+							<a href="/admin_booking/{{ booking.route_id }}/details">
+								<div class="item col-sm-4">
+									<div class="destination_content">
+										<div class="destination_title"><h2>{{ booking.from}} to {{ booking.to }}</h2></div>
+										<div class="destination_route"><p>{{ booking.route_id }}</p></div>
+									</div>
+								</div>
+							</a>
+							{% endfor %}
+
 						</div>
-						{% endfor %}
-
 					</div>
 				</div>
-			</div>
+
+			{% endif %}
 		</div>
 	</div>
 

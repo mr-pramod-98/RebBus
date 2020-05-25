@@ -323,7 +323,20 @@ def admin_booking_panel():
 
                     bookings.append(booking)
 
-        return render_template('admin_booking_panel.html', bookings=bookings)
+        return render_template('admin_booking_panel.html', bookings=bookings, show_specific_item_details=False)
+    else:
+        return redirect(url_for('admin_login'))
+
+
+@app.route('/admin_booking/<string:route_id>/details')
+def admin_booking_item_details_panel(route_id):
+    if current_user.is_authenticated and current_user.is_staff:
+
+        with open('RedBus/bookings.txt', 'rt') as f:
+            bookings_data = json.load(f)
+            bookings = bookings_data["bookings"][route_id]
+
+        return render_template('admin_booking_panel.html', bookings=bookings, show_specific_item_details=True)
     else:
         return redirect(url_for('admin_login'))
 

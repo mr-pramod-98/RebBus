@@ -1,0 +1,17 @@
+.destination_content {
+    background: #808080;
+    height: 140px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top:30px;
+    padding:15px;
+    border-radius: 8px;
+}
+
+.destination_title h2{
+    color: #FFF;
+}
+
+.destination_route p{
+    color: #000;
+}
