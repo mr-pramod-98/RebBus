@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedBus</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,79 +40,82 @@
     </div>
 
     <div class="bus-list">
-        <h2>Available buses</h2>
+        <h2 class="text-center">Available buses</h2>
+        <div class="container">
+            <div class="w3-card-4">
+                {% if is_search_success %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Pickup</th>
+                                <th>Boarding</th>
+                                <th>Duration</th>
+                                <th>Price</th>
+                                <th>Seats left</th>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-        {% if is_search_success %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Pickup</th>
-                        <th>Boarding</th>
-                        <th>Duration</th>
-                        <th>Price</th>
-                        <th>Seats left</th>
-                        <th style="color: #345D7B;">Book</th>
-                    </tr>
-                </thead>
+                        <tbody>
+                            {% for bus in buses %}
+                            <tr>
+                                <td>{{bus.from}}</td>
+                                <td>{{bus.to}}</td>
+                                <td>{{bus.pickup_location}}</td>
+                                <td>{{bus.boarding_time}}</td>
+                                <td>{{bus.traveling_time}}</td>
+                                <td>{{bus.no_of_seats}}</td>
+                                <td>{{bus.price}}</td>
+                                <td>
+                                    <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
+                                        <input type="submit" class="btn btn-danger" value="Book">
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% elif is_search %}
+                    <h3> No Buses found for your search </h3>
+                {% else %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Pickup</th>
+                                <th>Boarding</th>
+                                <th>Duration</th>
+                                <th>Price</th>
+                                <th>Seats left</th>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                    {% for bus in buses %}
-                    <tr>
-                        <td>{{bus.from}}</td>
-                        <td>{{bus.to}}</td>
-                        <td>{{bus.pickup_location}}</td>
-                        <td>{{bus.boarding_time}}</td>
-                        <td>{{bus.traveling_time}}</td>
-                        <td>{{bus.no_of_seats}}</td>
-                        <td>{{bus.price}}</td>
-                        <td>
-                            <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
-                                <input type="submit" class="btn btn-danger" value="Book">
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% elif is_search %}
-            <h3> No Buses found for your search </h3>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Pickup</th>
-                        <th>Boarding</th>
-                        <th>Duration</th>
-                        <th>Price</th>
-                        <th>Seats left</th>
-                        <th style="color: #345D7B;">Book</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for bus in buses %}
-                    <tr>
-                        <td>{{bus.from}}</td>
-                        <td>{{bus.to}}</td>
-                        <td>{{bus.pickup_location}}</td>
-                        <td>{{bus.boarding_time}}</td>
-                        <td>{{bus.traveling_time}}</td>
-                        <td>{{bus.no_of_seats}}</td>
-                        <td>{{bus.price}}</td>
-                        <td>
-                            <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
-                                <input type="submit" class="btn btn-danger" value="Book">
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+                        <tbody>
+                            {% for bus in buses %}
+                            <tr>
+                                <td>{{bus.from}}</td>
+                                <td>{{bus.to}}</td>
+                                <td>{{bus.pickup_location}}</td>
+                                <td>{{bus.boarding_time}}</td>
+                                <td>{{bus.traveling_time}}</td>
+                                <td>{{bus.no_of_seats}}</td>
+                                <td>{{bus.price}}</td>
+                                <td>
+                                    <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
+                                        <input type="submit" class="btn btn-danger" value="Book">
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </body>
 

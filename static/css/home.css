@@ -146,6 +146,11 @@ table {
 thead tr {
     color: white;
     margin-top: 1em;
+    height: 80px;
+}
+
+table thead th {
+    vertical-align: baseline;
 }
 
 th {
@@ -174,3 +179,11 @@ tbody tr {
     background-color: rgb(21, 141, 226);
 }
 
+.container {
+    max-width: 94%;
+    margin-bottom: 80px;
+}
+
+.table tbody tr td form input:hover {
+    background-color: red;
+}
