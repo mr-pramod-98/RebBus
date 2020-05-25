@@ -118,8 +118,8 @@ def home():
 
 
 @app.route('/RedBus/about-us')
-def about_us():
-    return render_template('about.html', is_search=False)
+def contact():
+    return render_template('contact.html', is_search=False)
 
 
 @app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
