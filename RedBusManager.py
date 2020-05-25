@@ -124,7 +124,19 @@ def about_us():
 
 @app.route('/RedBus/current_user/<string:route_id>/booking', methods=['POST'])
 def ticket_booking(route_id):
-    return render_template('booking.html')
+    form_data = {}
+    with open('RedBus/buses.txt', 'r') as f:
+        for line in f.readlines():
+            if route_id in line:
+                data = line.split("|")
+                form_data = {
+                    "name": current_user.name,
+                    "email": current_user.email,
+                    "cost": data[-2],
+                    "max_seat": data[-1]
+                }
+                break
+    return render_template('booking.html', form_data=form_data)
 
 
 @app.route('/RedBus/home/search', methods=['POST'])
