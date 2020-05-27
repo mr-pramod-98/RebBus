@@ -193,13 +193,12 @@ tbody tr {
 }
 
 .book-button {
-    background-color: #3C9DE4;
-    color: white;
-    cursor: pointer;
+
 }
 
 .book-button:hover {
-    background-color: rgb(21, 141, 226);
+    background-color: #708090;
+    border-color: #708090;
 }
 
 .container {
@@ -207,6 +206,12 @@ tbody tr {
     margin-bottom: 80px;
 }
 
-.table tbody tr td form input:hover {
-    background-color: red;
+.text-title {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.invalid-search {
+    padding: 40px;
+    color: #345D7B;
 }

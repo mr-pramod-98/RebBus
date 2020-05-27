@@ -17,7 +17,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <ul class="nav-links">
-            <li><a class="active" href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li><a class="active" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
             <li><a href="{{ url_for('user_logout') }}">Sign out</a></li>
         </ul>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="bus-list">
-        <h2 class="text-center">Available buses</h2>
+        <h2 class="text-center text-title">Available buses</h2>
         <div class="container">
             <div class="w3-card-4">
                 {% if is_search_success %}
@@ -93,7 +93,7 @@
                         </tbody>
                     </table>
                 {% elif is_search %}
-                    <h3> No Buses found for your search </h3>
+                    <h3 class="text-center font-weight-bold alert-info invalid-search"> No Buses found for your search </h3>
                 {% else %}
                     <table class="table table-striped">
                         <thead>
@@ -121,7 +121,7 @@
                                 <td>{{bus.price}}</td>
                                 <td>
                                     <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
-                                        <input type="submit" class="btn btn-danger" value="Book">
+                                        <input type="submit" class="btn btn-danger book-button" value="Book">
                                     </form>
                                 </td>
                             </tr>
