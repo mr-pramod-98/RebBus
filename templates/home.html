@@ -24,12 +24,12 @@
     </nav>
 
     <div class="main-background">
-        <form name="search" action="" method="post">
+        <form name="search">
             <div class="from-to-input">
                 <div class="from-input">
                     <i class="fas fa-map-marker-alt"></i>
-                    <select>
-                        <option value="From"> From </option>
+                    <select name="from">
+                        <option value="From" selected> From </option>
                         {% for location in from_locations %}
                         <option value="{{ location }}"> {{ location }} </option>
                         {% endfor %}
@@ -39,7 +39,7 @@
                     <i class="fas fa-retweet"></i>
                 </div>
                 <div class="to-input">
-                    <select>
+                    <select name="to">
                         <option value="To"> To </option>
                         {% for location in to_locations %}
                         <option value="{{ location }}"> {{ location }} </option>
@@ -48,7 +48,7 @@
                     <i class="fab fa-font-awesome-flag"></i>
                 </div>
                 <div class="search-input">
-                    <input type="submit" value="Search">
+                    <input type="button" name="search-button" value="Search">
                 </div>
             </div>
         </form>
@@ -135,6 +135,19 @@
 </body>
 
 <footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        document
+            .forms["search"]["search-button"]
+            .addEventListener(
+                "click",
+                function(){
+                    let from = document.forms["search"]["from"].value;
+                    let to = document.forms["search"]["to"].value;
+                    window.location.href = "/RedBus/home/" + from + "/" + to + "/search-result";
+                }
+            );
+    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='javascript/bootstrap.js') }}"></script>
     <script src="https://kit.fontawesome.com/f73f05b1a6.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

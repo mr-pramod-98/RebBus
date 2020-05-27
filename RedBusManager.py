@@ -218,22 +218,42 @@ def confirm_booking(route_id):
     return redirect(url_for('home'))
 
 
-@app.route('/RedBus/home/search', methods=['POST'])
-def search():
+@app.route('/RedBus/home/<string:from_>/<string:to_>/search-result')
+def search(from_, to_):
     if current_user.is_authenticated:
         buses = []
         from_locations = []
         to_locations = []
-        from_location = request.form['from']
+
+        with open('RedBus/Index/from_location.txt', 'rt') as f:
+            from_location = json.load(f)
+            for location in from_location['from_location']:
+                from_locations.append(location)
+
+        with open('RedBus/Index/to_location.txt', 'rt') as f:
+            to_location = json.load(f)
+            for location in to_location['to_location']:
+                to_locations.append(location)
 
         # from
         with open('RedBus/Index/from_location.txt', 'r') as f:
             from_location_data = json.load(f)
             try:
-                route_ids = from_location_data['from_location'][from_location]
+                from_route_ids = from_location_data['from_location'][from_]
             except KeyError:
                 return render_template('home.html', buses=buses, from_locations=from_locations,
                                        to_locations=to_locations, is_search_success=False, is_search=True)
+
+        # to
+        with open('RedBus/Index/to_location.txt', 'r') as f:
+            from_location_data = json.load(f)
+            try:
+                to_route_ids = from_location_data['to_location'][to_]
+            except KeyError:
+                return render_template('home.html', buses=buses, from_locations=from_locations,
+                                       to_locations=to_locations, is_search_success=False, is_search=True)
+
+        route_ids = list(filter(lambda r_id: r_id in from_route_ids, to_route_ids))
 
         with open('RedBus/buses.txt', 'r') as f:
             for route_id in route_ids:
@@ -251,16 +271,6 @@ def search():
                             "price": bus_data[7]
                         }
                         buses.append(bus)
-
-        with open('RedBus/Index/from_location.txt', 'rt') as f:
-            from_location = json.load(f)
-            for location in from_location['from_location']:
-                from_locations.append(location)
-
-        with open('RedBus/Index/to_location.txt', 'rt') as f:
-            to_location = json.load(f)
-            for location in to_location['to_location']:
-                to_locations.append(location)
 
         return render_template('home.html', buses=buses, from_locations=from_locations,
                                to_locations=to_locations, is_search_success=True, is_search=True)
