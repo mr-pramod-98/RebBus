@@ -49,7 +49,7 @@ nav {
     object-fit: cover;
 }
 
-input {
+select {
     display: block;
     font-size: 1.2rem;
     padding: 1em;
@@ -74,19 +74,42 @@ input {
     border-radius: 15px;
 }
 
+.search-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:2px solid #345D7B;
+    border-radius: 15px;
+    margin-left: 15px;
+}
+
 .from-to-input {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.to-input input {
+.to-input select {
     display: block;
     font-size: 1.2rem;
     padding: 1em;
     border-radius: 15px 0 0 15px;
     border-style: none;
     font-family: inherit;
+}
+
+.search-input input {
+    display: block;
+    font-size: 1.2rem;
+    padding: 1em;
+    border-radius: 15px;
+    border-style: none;
+    font-family: inherit;
+}
+
+.search-input input:hover {
+    background-color: #FFF;
+    color: #345D7B;
 }
 
 .to-input i {

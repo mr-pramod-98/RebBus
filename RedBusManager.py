@@ -94,6 +94,8 @@ def user_sign_up():
 def home():
     if current_user.is_authenticated:
         buses = []
+        from_locations = []
+        to_locations = []
 
         with open('RedBus/buses.txt', 'rt') as f:
             for line in f.readlines():
@@ -111,7 +113,18 @@ def home():
 
                 buses.append(bus)
 
-        return render_template('home.html', buses=buses, is_search=False)
+        with open('RedBus/Index/from_location.txt', 'rt') as f:
+            from_location = json.load(f)
+            for location in from_location['from_location']:
+                from_locations.append(location)
+
+        with open('RedBus/Index/to_location.txt', 'rt') as f:
+            to_location = json.load(f)
+            for location in to_location['to_location']:
+                to_locations.append(location)
+
+        return render_template('home.html', buses=buses, from_locations=from_locations,
+                               to_locations=to_locations, is_search=False)
 
     else:
         return redirect(url_for('user_login'))
@@ -209,6 +222,8 @@ def confirm_booking(route_id):
 def search():
     if current_user.is_authenticated:
         buses = []
+        from_locations = []
+        to_locations = []
         from_location = request.form['from']
 
         # from
@@ -217,7 +232,8 @@ def search():
             try:
                 route_ids = from_location_data['from_location'][from_location]
             except KeyError:
-                return render_template('home.html', buses=buses, is_search_success=False, is_search=True)
+                return render_template('home.html', buses=buses, from_locations=from_locations,
+                                       to_locations=to_locations, is_search_success=False, is_search=True)
 
         with open('RedBus/buses.txt', 'r') as f:
             for route_id in route_ids:
@@ -236,7 +252,18 @@ def search():
                         }
                         buses.append(bus)
 
-        return render_template('home.html', buses=buses, is_search_success=True, is_search=True)
+        with open('RedBus/Index/from_location.txt', 'rt') as f:
+            from_location = json.load(f)
+            for location in from_location['from_location']:
+                from_locations.append(location)
+
+        with open('RedBus/Index/to_location.txt', 'rt') as f:
+            to_location = json.load(f)
+            for location in to_location['to_location']:
+                to_locations.append(location)
+
+        return render_template('home.html', buses=buses, from_locations=from_locations,
+                               to_locations=to_locations, is_search_success=True, is_search=True)
     else:
         return redirect(url_for('user_login'))
 

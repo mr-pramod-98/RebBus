@@ -24,19 +24,34 @@
     </nav>
 
     <div class="main-background">
-        <div class="from-to-input">
-            <div class="from-input">
-                <i class="fas fa-map-marker-alt"></i>
-                <input type="text" placeholder="From">
+        <form name="search" action="" method="post">
+            <div class="from-to-input">
+                <div class="from-input">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select>
+                        <option value="From"> From </option>
+                        {% for location in from_locations %}
+                        <option value="{{ location }}"> {{ location }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="reverse-button">
+                    <i class="fas fa-retweet"></i>
+                </div>
+                <div class="to-input">
+                    <select>
+                        <option value="To"> To </option>
+                        {% for location in to_locations %}
+                        <option value="{{ location }}"> {{ location }} </option>
+                        {% endfor %}
+                    </select>
+                    <i class="fab fa-font-awesome-flag"></i>
+                </div>
+                <div class="search-input">
+                    <input type="submit" value="Search">
+                </div>
             </div>
-            <div class="reverse-button">
-                <i class="fas fa-retweet"></i>
-            </div>
-            <div class="to-input">
-                <input type="text" placeholder="To">
-                <i class="fab fa-font-awesome-flag"></i>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="bus-list">
