@@ -1,4 +1,4 @@
-44264454|Mysuru|Bangalore|Palace|06:00|3 hour|30|400
+44264454|Mysuru|Bangalore|Palace|06:00|3 hour|26|400
 42895121|Udpi|Bangalore|JP Nagar|07:30|4 hour|29|1200
 53220358|Bangalore|Manglore|KRM|13:03|6 hour|30|2400
 98497940|Bangalore|Kolar|KRM|06:00|4 hour|32|700

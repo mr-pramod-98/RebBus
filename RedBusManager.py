@@ -218,8 +218,8 @@ def confirm_booking(route_id):
     return redirect(url_for('home'))
 
 
-@app.route('/RedBus/home/<string:from_>/<string:to_>/search-result')
-def search(from_, to_):
+@app.route('/RedBus/home/<string:from_location>/<string:to_location>/search-result')
+def search(from_location, to_location):
     if current_user.is_authenticated:
         buses = []
         from_locations = []
@@ -227,38 +227,45 @@ def search(from_, to_):
 
         with open('RedBus/Index/from_location.txt', 'rt') as f:
             from_location_data = json.load(f)
-            from_route_ids = from_location_data['from_location'][from_]
+            if from_location != "-":
+                from_route_ids = from_location_data['from_location'][from_location]
             for location in from_location_data['from_location']:
                 from_locations.append(location)
 
         with open('RedBus/Index/to_location.txt', 'rt') as f:
             to_location_data = json.load(f)
-            to_route_ids = to_location_data['to_location'][to_]
+            if to_location != "-":
+                to_route_ids = to_location_data['to_location'][to_location]
             for location in to_location_data['to_location']:
                 to_locations.append(location)
 
-        route_ids = list(filter(lambda r_id: r_id in from_route_ids, to_route_ids))
+        if from_location == "-":
+            route_ids = to_route_ids
+        elif to_location == "-":
+            route_ids = from_route_ids
+        else:
+            route_ids = list(filter(lambda r_id: r_id in from_route_ids, to_route_ids))
 
         if len(route_ids) == 0:
             return render_template('home.html', buses=buses, from_locations=from_locations,
                                    to_locations=to_locations, is_search_success=False, is_search=True)
 
         with open('RedBus/buses.txt', 'r') as f:
-            for route_id in route_ids:
-                for line in f.readlines():
-                    if str(route_id) in line:
-                        bus_data = line.split("|")
-                        bus = {
-                            "id": bus_data[0],
-                            "from": bus_data[1],
-                            "to": bus_data[2],
-                            "pickup_location": bus_data[3],
-                            "boarding_time": bus_data[4],
-                            "traveling_time": bus_data[5],
-                            "no_of_seats": bus_data[6],
-                            "price": bus_data[7]
-                        }
-                        buses.append(bus)
+            for line in f.readlines():
+                bus_data = line.split("|")
+                route_id = bus_data[0]
+                if int(route_id) in route_ids:
+                    bus = {
+                        "id": bus_data[0],
+                        "from": bus_data[1],
+                        "to": bus_data[2],
+                        "pickup_location": bus_data[3],
+                        "boarding_time": bus_data[4],
+                        "traveling_time": bus_data[5],
+                        "no_of_seats": bus_data[6],
+                        "price": bus_data[7]
+                    }
+                    buses.append(bus)
 
         return render_template('home.html', buses=buses, from_locations=from_locations,
                                to_locations=to_locations, is_search_success=True, is_search=True)

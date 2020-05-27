@@ -142,9 +142,18 @@
             .addEventListener(
                 "click",
                 function(){
-                    let from = document.forms["search"]["from"].value;
-                    let to = document.forms["search"]["to"].value;
-                    window.location.href = "/RedBus/home/" + from + "/" + to + "/search-result";
+                    var from = document.forms["search"]["from"].value;
+                    var to = document.forms["search"]["to"].value;
+                    var condition = from == "From" && to == "To";
+                    if(condition){
+                        alert("Select  'From'  and  'To'  location")
+                    }else if(from == "From"){
+                        window.location.href = "/RedBus/home/-/" + to + "/search-result";
+                    }else if(to == "To"){
+                        window.location.href = "/RedBus/home/" + from + "/-/search-result";
+                    }else{
+                        window.location.href = "/RedBus/home/" + from + "/" + to + "/search-result";
+                    }
                 }
             );
     </script>
