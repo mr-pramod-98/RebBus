@@ -21,7 +21,7 @@ html {
     width: 62vw;
 }
 
-body {
+.body {
     display: flex;
     flex-direction: row;
     height: 100vh;
@@ -133,6 +133,31 @@ hr {
     height: 1%;
     margin: 0;
     align-self: flex-end;
-    margin-right: 4em;
+    margin-left: 13.2em;
     margin-top: 1em;
+}
+
+.alert {
+    margin-bottom: 10px;
+    padding: 14px;
+    background-color: #f44336;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.alert-dismiss {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.alert-dismiss :hover {
+    color: black;
 }

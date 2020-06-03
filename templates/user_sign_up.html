@@ -5,10 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RedBus</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Pacifico&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sign_up_style.css') }}">
 </head>
 <body>
+
+{% with massages = get_flashed_messages() %}
+    {% if massages %}
+        {% for massage in massages %}
+        <div class="alert">
+            <span class="alert-dismiss" onclick="this.parentElement.style.display='none';">&times;</span>
+            {{ massage }}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="body">
     <div class="hero-card">
         <h1>Redbus</h1>
         <h2>Best buses at the cheapest prices</h2>
@@ -23,26 +37,26 @@
 
             <div class="name-input">
                 <i class="fas fa-user"></i>
-                <input type="text" placeholder="Name" name="name">
+                <input type="text" placeholder="Name" name="name" required>
             </div>
 
             <div class="email-input">
                 <i class="fas fa-at"></i>
-                <input type="email" placeholder="Email" name="email">
+                <input type="email" placeholder="Email" name="email" required>
             </div>
 
             <div class="password-input">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" name="password">
+                <input type="password" placeholder="Password" name="password" required>
             </div>
 
             <input type="submit" id="button" value="Sign up">
         </form>
     </div>
-</body>
+</div>
 
+</body>
 <footer>
     <script src="https://kit.fontawesome.com/f73f05b1a6.js" crossorigin="anonymous"></script>
 </footer>
-
 </html>

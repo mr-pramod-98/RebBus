@@ -109,6 +109,7 @@ def user_sign_up():
         else:
 
             # REDIRECTING THE USER BACK TO THE "sign-up" PAGE
+            flash("User already exist!")
             return render_template('user_sign_up.html')
 
         # FORM VALIDATION --> END
