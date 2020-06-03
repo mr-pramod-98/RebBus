@@ -221,7 +221,6 @@ def confirm_booking(route_id):
     cost = request.form['cost']
 
     seats = None
-    global lines
 
     # UPDATING THE NUMBER OF SEATS LEFT --> START
     with open('RedBus/buses.txt', 'rt') as f:
@@ -286,7 +285,7 @@ def confirm_booking(route_id):
         new_bookings = json.dumps(bookings)
         f.write(new_bookings)
 
-    # INSERT THE RECORD INTO "RedBus/bookings.txt" FILE --> START
+    # INSERT THE RECORD INTO "RedBus/bookings.txt" FILE --> END
 
     # REDIRECTING TO "/RedBus/home" PAGE AFTER SUCCESSFUL BOOKING TO THE TICKET ( i.e, home.html)
     return redirect(url_for('home'))
@@ -387,11 +386,15 @@ def user_logout():
 # "admin_delete_user" METHOD IS CALLED WHET THE ADMIN CLICK'S ON "Remove" BUTTON
 @app.route('/admin_delete_user/<string:email>')
 def admin_delete_user(email):
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.is_staff:
+
+        # FETCHING THE RECORD( i.e, USERS) OF THE USER TOBE DELETED FOR "Users" TABLE
         user = Users.query.filter_by(email=email).first()
+        # REMOVING THE USER ENTRY FROM "Users" TABLE
         db.session.delete(user)
         db.session.commit()
 
+        # REMOVING THE USER ENTRY FROM "RedBus/users.txt" FILE --> START
         with open("RedBus/users.txt", "r") as f:
             lines = f.readlines()
         with open("RedBus/users.txt", "w") as f:
@@ -399,8 +402,11 @@ def admin_delete_user(email):
                 if email not in line:
                     f.write(line)
 
+        # REMOVING THE USER ENTRY FROM "RedBus/users.txt" FILE --> END
+
         flash(f'User with mail-id "{email}" deleted successfully', 'success')
 
+        # REDIRECTING TO "/admin_users" PAGE AFTER SUCCESSFUL DELETING THE USER RECORD
         return redirect(url_for('admin_users_panel'))
 
 
@@ -408,10 +414,12 @@ def admin_delete_user(email):
 # EVERY-TIME USER REQUESTS FOR "admin-users-panel" PAGE
 @app.route('/admin_users')
 def admin_users_panel():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.is_staff:
 
         # FETCHING ALL RECORDS( i.e, USERS) FOR "Users" TABLE
         users = Users.query.all()
+
+        # RETURNING THE REQUESTED PAGE( i.e, admin_users_panel.html)
         return render_template('admin_users_panel.html', users=users)
     else:
         return redirect(url_for('admin_login'))
@@ -421,8 +429,11 @@ def admin_users_panel():
 @app.route('/admin_buses')
 def admin_buses_panel():
     if current_user.is_authenticated and current_user.is_staff:
+
+        # "buses" IS USED TO HOLD ALL THE ROUTES IN THE FILE "RedBus/buses.txt"
         buses = []
 
+        # FETCHING ALL RECORDS( i.e, ROUTES) FORM "RedBus/buses.txt" FILE
         with open('RedBus/buses.txt', 'rt') as f:
             for line in f.readlines():
                 bus_data = line.split("|")
@@ -437,8 +448,10 @@ def admin_buses_panel():
                     "price": bus_data[7]
                 }
 
+                # ADDING RECORD TO "buses" LIST
                 buses.append(bus)
 
+        # RETURNING THE REQUESTED PAGE( i.e, admin_buses_panel.html)
         return render_template('admin_buses_panel.html', buses=buses)
     else:
         return redirect(url_for('admin_login'))
@@ -448,14 +461,21 @@ def admin_buses_panel():
 @app.route('/admin_booking')
 def admin_booking_panel():
     if current_user.is_authenticated and current_user.is_staff:
-        bookings = []
-        route_ids = []
 
+        # "route_ids" IS USED TO HOLD ALL THE ROUTE-ID'S IN THE FILE "RedBus/bookings.txt"
+        route_ids = []
+        # "bookings" IS USED TO HOLD THE DETAILS OF ROUTE-ID'S PRESENT IN "route_ids" LIST
+        bookings = []
+
+        # FETCHING ALL THE ROUTE-ID'S WHICH HAS BOOKINGS
         with open('RedBus/bookings.txt', 'rt') as f:
             items = json.load(f)
             for item in items['bookings']:
+
+                # ADDING RECORD TO "route_ids" LIST
                 route_ids.append(item)
 
+        # FETCHING DETAILS OF ALL THE ROUTE-ID'S PRESENT IN THE "route_ids" LIST
         with open('RedBus/buses.txt', 'rt') as f:
             for line in f.readlines():
                 data = line.split("|")
@@ -468,8 +488,10 @@ def admin_booking_panel():
                         "to": data[2]
                     }
 
+                    # ADDING RECORD TO "bookings" LIST
                     bookings.append(booking)
 
+        # RETURNING THE REQUESTED PAGE( i.e, admin_booking_panel.html)
         return render_template('admin_booking_panel.html', bookings=bookings, show_specific_item_details=False)
     else:
         return redirect(url_for('admin_login'))
@@ -480,10 +502,12 @@ def admin_booking_panel():
 def admin_booking_item_details_panel(route_id):
     if current_user.is_authenticated and current_user.is_staff:
 
+        # FETCHING ALL THE BOOKINGS MADE ON A PARTICULAR ROUTE( i.e, route_id)
         with open('RedBus/bookings.txt', 'rt') as f:
             bookings_data = json.load(f)
             bookings = bookings_data["bookings"][route_id]
 
+        # RETURNING THE REQUESTED PAGE( i.e, admin_booking_panel.html)
         return render_template('admin_booking_panel.html', bookings=bookings, show_specific_item_details=True)
     else:
         return redirect(url_for('admin_login'))
@@ -493,8 +517,12 @@ def admin_booking_item_details_panel(route_id):
 @app.route('/admin_add_route', methods=['POST'])
 def admin_add_route():
     # IF THE REQUEST METHOD IS "POST" THEN EXECUTE if BLOCK
-    if request.method == 'POST':
+    if request.method == 'POST' and current_user.is_authenticated and current_user.is_staff:
+
+        # GENERATING "route_id" BY HASHING THE "DATE AND TIME" OF SUBMISSION
         route_id = abs(hash(str(datetime.now())) % (10 ** 8))
+
+        # READING THE SENT DATA FROM THE FORM
         from_location = request.form['from_location']
         to_location = request.form['to_location']
         pickup_location = request.form['pickup_location']
@@ -503,6 +531,7 @@ def admin_add_route():
         no_of_seats = request.form['no_of_seats']
         price = request.form['price']
 
+        # CREATING AN ENTRY IN THE "RedBus/buses.txt" FILE
         with open('RedBus/buses.txt', 'at') as f:
             f.write(str(route_id) + "|"
                     + from_location + "|"
@@ -513,7 +542,8 @@ def admin_add_route():
                     + no_of_seats + "|"
                     + price + "\n")
 
-        # from
+        # CREATING AN ENTRY OF THE "route_id" IN THE "RedBus/Index/from_location.txt" FILE --> START
+        # INDEX ON FROM-LOCATIONS
         with open('RedBus/Index/from_location.txt', 'r') as f:
             from_location_data = json.load(f)
             try:
@@ -526,7 +556,10 @@ def admin_add_route():
             locations = json.dumps(from_location_data)
             f.write(locations)
 
-        # to
+        # CREATING AN ENTRY OF THE "route_id" IN THE "RedBus/Index/from_location.txt" FILE --> END
+
+        # CREATING AN ENTRY OF THE "route_id" IN THE "RedBus/Index/to_location.txt" FILE --> START
+        # INDEX ON TO-LOCATIONS
         with open('RedBus/Index/to_location.txt', 'r') as f:
             to_location_data = json.load(f)
             try:
@@ -539,7 +572,11 @@ def admin_add_route():
             locations = json.dumps(to_location_data)
             f.write(locations)
 
+        # CREATING AN ENTRY OF THE "route_id" IN THE "RedBus/Index/to_location.txt" FILE --> END
+
         flash(f'Route {route_id} add successfully', 'success')
+
+        # REDIRECTING TO "/admin_buses" PAGE AFTER SUCCESSFUL ADDING THE RECORD
         return redirect(url_for('admin_buses_panel'))
 
 
@@ -550,6 +587,7 @@ def admin_delete_route(route_id):
         from_location = None
         to_location = None
 
+        # REMOVING THE ENTRY WITH THE ROUTE-ID "route_id" FROM "RedBus/buses.txt" FILE --> START
         with open("RedBus/buses.txt", "r") as f:
             lines = f.readlines()
         with open("RedBus/buses.txt", "w") as f:
@@ -560,7 +598,10 @@ def admin_delete_route(route_id):
                     from_location = line.split("|")[1]
                     to_location = line.split("|")[2]
 
-        # from
+        # REMOVING THE ENTRY WITH THE ROUTE-ID "route_id" FROM "RedBus/buses.txt" FILE --> END
+
+        # REMOVING THE CORRESPONDING ENTRY FROM THE "RedBus/Index/from_location.txt" FILE --> START
+        # INDEX ON FROM-LOCATIONS
         with open('RedBus/Index/from_location.txt', 'r') as f:
             from_location_data = json.load(f)
             route_ids = from_location_data['from_location'][from_location]
@@ -573,8 +614,10 @@ def admin_delete_route(route_id):
             locations = json.dumps(from_location_data)
             f.write(locations)
 
+        # REMOVING THE CORRESPONDING ENTRY FROM THE "RedBus/Index/from_location.txt" FILE --> END
 
-        # to
+        # REMOVING THE CORRESPONDING ENTRY FROM THE "RedBus/Index/to_location.txt" FILE --> START
+        # INDEX ON TO-LOCATIONS
         with open('RedBus/Index/to_location.txt', 'r') as f:
             to_location_data = json.load(f)
             route_ids = to_location_data['to_location'][to_location]
@@ -587,7 +630,11 @@ def admin_delete_route(route_id):
             locations = json.dumps(to_location_data)
             f.write(locations)
 
+        # REMOVING THE CORRESPONDING ENTRY FROM THE "RedBus/Index/from_location.txt" FILE --> END
+
         flash(f'Route with id "{route_id}" deleted successfully', 'success')
+
+        # REDIRECTING TO "/admin_buses" PAGE AFTER SUCCESSFUL REMOVING THE SPECIFIED RECORD
         return redirect(url_for('admin_buses_panel'))
 
 
