@@ -126,7 +126,7 @@
                                 <td>{{bus.no_of_seats}}</td>
                                 <td>{{bus.price}}</td>
                                 <td>
-                                    {% if bus.no_of_seats > 0%}
+                                    {% if bus.no_of_seats > 0 %}
                                     <form action="/RedBus/current_user/{{ bus.id }}/booking" method="post">
                                         <input type="submit" class="btn btn-danger" value="Book">
                                     </form>
